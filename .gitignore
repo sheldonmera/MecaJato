@@ -1,0 +1,4 @@
+v-env/
+db.sqlite3
+cliente/__pycache__/
+core/__pycache__/
