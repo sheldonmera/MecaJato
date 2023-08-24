@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect,get_object_or_404
 from django.contrib import messages
 from django.contrib.messages import constants
 from django.http import JsonResponse
@@ -63,18 +63,23 @@ def cliente(request):
         messages.add_message(request, constants.SUCCESS, 'Carro(s) e Cliente Cadastrados !')
         return render(request, 'clientes.html')
     
-def atualiza_cliente(request):
+def busca_cliente(request):
     #TODO arrumar para fazer a busca por cpf
     cpf_cliente = request.POST.get('cpf_cliente')
-    cliente = Cliente.objects.filter(cpf=cpf_cliente)
-    carros = Carro.objects.filter(cliente=cliente[0])
-    cliente_json = json.loads(serializers.serialize('json', cliente))[0]['fields']
-    cliente_id = json.loads(serializers.serialize('json', cliente))[0]['pk']
-    carros_json = json.loads(serializers.serialize('json', carros))
-    carros_json = [{'fields': i['fields'], 'id': i['pk']} for i in carros_json]
-    data = {'cliente': cliente_json, 'carros': carros_json, 'cliente_id': cliente_id}
-    print(data)
-    return JsonResponse(data)
+    if len(cpf_cliente.strip())==0 or len(cpf_cliente.strip()) < 11:
+        #TODO ver porque nao fucniona
+        messages.add_message(request, constants.WARNING, 'Digite um CPF válido para busca !')
+        return JsonResponse({"data":'dado'})
+    else:
+        cliente = Cliente.objects.filter(cpf=cpf_cliente)
+        id_cliente = cliente.values_list('id', flat=True).first()
+        carros = Carro.objects.filter(cliente__id=id_cliente)
+        cliente_json = json.loads(serializers.serialize('json', cliente))[0]['fields']
+        cliente_id = json.loads(serializers.serialize('json', cliente))[0]['pk']
+        carros_json = json.loads(serializers.serialize('json', carros))
+        carros_json = [{'fields': i['fields'], 'id': i['pk']} for i in carros_json]
+        data = {'cliente': cliente_json, 'carros': carros_json, 'cliente_id': cliente_id}
+        return JsonResponse(data)
     
 
 @csrf_exempt
@@ -110,6 +115,28 @@ def delete_carro(request,id):
         messages.add_message(request, constants.WARNING, 'Algo de eraado aconteceu, redirecionando... !')
         return redirect(reverse('cliente'))
     
+
+def update_cliente(request,id):
+    #TODO fazer validacoes, tryes e excpets enviando o status e talz
+    body_update_cliente = request.body
+    json_body = json.loads(body_update_cliente)
+    
+    nome = json_body['nome']
+    sobrenome = json_body['sobrenome']
+    email = json_body['email']
+    cpf = json_body['cpf']
+    
+    dados_cliente_update = get_object_or_404(Cliente, id=id)
+    
+    dados_cliente_update.nome = nome
+    dados_cliente_update.sobrenome = sobrenome
+    dados_cliente_update.email = email
+    dados_cliente_update.cpf = cpf
+    
+    dados_cliente_update.save()
+    return JsonResponse({'status':'200','nome':nome,'sobrenome':sobrenome,'email':email,'cpf':cpf,})
+
+
 
 # def atualiza_cliente(request):
     
