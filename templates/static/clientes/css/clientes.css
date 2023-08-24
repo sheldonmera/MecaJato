@@ -6,6 +6,7 @@
     margin-top: 40px;
     text-align: center;
     padding: 20px;
+    cursor: default;
 
 }
 
@@ -30,4 +31,12 @@
     background-color: var(--dark-color);
     padding: 5px;
     font-size: 30px;
+}
+
+#atualiza_cliente{
+    display: none;
+}
+
+#form-att-cliente{
+    display: none;
 }
