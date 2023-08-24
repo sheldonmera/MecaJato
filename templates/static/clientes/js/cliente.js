@@ -10,7 +10,7 @@ function add_carro(){
 function exibir_form(tipo){
     
     adiciona_cliente = document.getElementById('adicionar-cliente');
-    atualiza_cliente = document.getElementById('atualiza_cliente');
+    atualiza_cliente = document.getElementById('busca_cliente');
     dados_atualiza_cliente = document.getElementById('form-att-cliente')
 
     if (tipo == "1") {
@@ -34,7 +34,7 @@ function dados_cliente() {
 
     data = new FormData();
     data.append('cpf_cliente', cpf_cliente);
-    fetch("/cliente/atualiza_cliente/", {
+    fetch("/cliente/busca_cliente/", {
         method: "POST",
         headers: {
             'X-CSRFToken': csrf_token,
@@ -77,11 +77,11 @@ function dados_cliente() {
                 <div class= 'col-md'>\
                     <input class='btn btn-primary' type='submit' name = 'Salvar' value='Salvar''>\
                 </div>\
-            </div>\
-        </form>\
                 <div class= 'col-md'>\
                     <a class='btn btn-danger' href='/cliente/delete_carro/"+data['carros'][i]['id']+"'>Excluir</a>\
                 </div>\
+            </div>\
+        </form>\
             <br>"
 
         }
@@ -91,3 +91,40 @@ function dados_cliente() {
 }
 
 
+function update_cliente(){
+
+    nome = document.getElementById('nome').value
+    sobrenome = document.getElementById('sobrenome').value
+    email = document.getElementById('email').value
+    cpf = document.getElementById('cpf').value
+    id = document.getElementById('id').value
+    
+
+    fetch("/cliente/update_cliente/"+ id, {
+        method: "POST",
+        headers: {
+            'X-CSRFToken': csrf_token,
+        },
+        body: JSON.stringify({
+
+            nome: nome,
+            sobrenome: sobrenome,
+            email: email,
+            cpf: cpf,
+
+        })
+    
+    }).then(function(result){
+        return result.json()
+    }).then(function(data){
+        if (data['status']=='200'){
+            nome = data['nome'];
+            sobrenome = data['sobrenome'];
+            email = data['email'];
+            cpf = data['cpf'];
+        }else{
+            $('.alert-primary').alert()
+        }
+    })
+
+}
