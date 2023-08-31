@@ -51,7 +51,7 @@
             </div>
             <div class="add-carros">
                 <h3>Carros</h3>
-                <span class="btn-add-carros" onclick="add_carro()">+ Adicionar um carro</span>
+                <span class="btn-add-carros" onclick="add_carro('2')">+ Adicionar um carro</span>
             
             </div>
             <div id="form-carro">
@@ -91,8 +91,9 @@
                     <div class= 'col-md'>
                         <input id="cliente-select" placeholder="000.000.000-00" type="number" class="form-control item" maxlength="11" >
                     </div>
+                    
                     <div class= 'col-md'>
-                        <button onclick="dados_cliente()" class='btn btn-secondary' id="buscaCliente">Buscar</button>
+                        <button  data-dismiss="alert" onclick="dados_cliente()" class='btn btn-secondary' id="buscaCliente">Buscar</button>
                     </div>
             </div>
             
@@ -111,6 +112,15 @@
                         <input onclick="update_cliente()"  type="submit" value="Salvar" class="btn btn-primary" > 
                     <hr style="background-color: gray;">
                     <br>
+
+                    <div class="add-carros">
+                        <h3>Carros</h3>
+                        <span class="btn-add-carros" onclick="add_carro('1')">+ Adicionar um carro</span>
+                    </div>
+                    <div id="form-carro_update" >
+
+                    </div>
+                    <hr style="background-color:gray;">
                     <p>Carros</p>
 
                 <div id="carros">

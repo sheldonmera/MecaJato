@@ -104,16 +104,20 @@ def update_carro(request,id):
 
 
 def delete_carro(request,id):
-    #carro = Carro.objects.get(id=id)
+
     try:
-        id_verifica = Carro.objects.get(id=id)
-        id_verifica.delete()
+        carro = Carro.objects.get(id=id)
+        
+        cliente = Cliente.objects.get(id=carro.cliente.pk)
+        #carro.delete()
         messages.add_message(request, constants.INFO, 'Carro deletado com sucesso !')
-        return redirect(reverse('cliente'))
+        return redirect(reverse('cliente')+f'?busca_cliente&cpf={cliente.cpf}')
+        #return redirect(reverse('cliente'))
         
     except:
-        messages.add_message(request, constants.WARNING, 'Algo de eraado aconteceu, redirecionando... !')
-        return redirect(reverse('cliente'))
+        messages.add_message(request, constants.WARNING, 'Algo de errado aconteceu, redirecionando... !')
+        return redirect(reverse('cliente')+f'?busca_cliente&cpf={cliente.cpf}')
+        #return redirect(reverse('cliente'))
     
 
 def update_cliente(request,id):
@@ -127,15 +131,16 @@ def update_cliente(request,id):
     cpf = json_body['cpf']
     
     dados_cliente_update = get_object_or_404(Cliente, id=id)
-    
-    dados_cliente_update.nome = nome
-    dados_cliente_update.sobrenome = sobrenome
-    dados_cliente_update.email = email
-    dados_cliente_update.cpf = cpf
-    
-    dados_cliente_update.save()
-    return JsonResponse({'status':'200','nome':nome,'sobrenome':sobrenome,'email':email,'cpf':cpf,})
-
+    try:
+        dados_cliente_update.nome = nome
+        dados_cliente_update.sobrenome = sobrenome
+        dados_cliente_update.email = email
+        dados_cliente_update.cpf = cpf
+        
+        dados_cliente_update.save()
+        return JsonResponse({'status':'200','nome':nome,'sobrenome':sobrenome,'email':email,'cpf':cpf,})
+    except:
+         JsonResponse({'status':'500'})
 
 
 # def atualiza_cliente(request):

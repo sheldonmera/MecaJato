@@ -1,10 +1,29 @@
-function add_carro(){
-
-    container = document.getElementById("form-carro")
-
-    html = "<br><div class='row'> <div class='col-md'> <input type='text' placeholder='carro' class='form-control' name='carro'></div> <div class='col-md'><input type='text' placeholder='Placa' class='form-control' name='placa'> </div> <div class='col-md'><input type='number' placeholder='Ano' class='form-control' name='ano'> </div></div>"
-
-    container.innerHTML += html
+function add_carro(tipo){
+    
+    if(tipo == "1"){
+        container = document.getElementById("form-carro_update")
+        html = "<br>\
+        <div class='row'>\
+            <div class='col-md'>\
+                <input type='text' placeholder='carro' class='form-control' name='carro'>\
+            </div>\
+            <div class='col-md'>\
+                <input type='text' placeholder='Placa' class='form-control' name='placa'>\
+            </div>\
+            <div class='col-md'>\
+                <input type='number' placeholder='Ano' class='form-control' name='ano'>\
+            </div>\
+            <div class= 'col-md'>\
+                <input class='btn btn-primary' type='button' name = 'Salvar' value='Salvar'>\
+            </div>\
+            </div>"
+        container.innerHTML += html
+    }else if(tipo == "2"){
+        container = document.getElementById("form-carro")
+        html = "<br><div class='row'> <div class='col-md'> <input type='text' placeholder='carro' class='form-control' name='carro'></div> <div class='col-md'><input type='text' placeholder='Placa' class='form-control' name='placa'> </div> <div class='col-md'><input type='number' placeholder='Ano' class='form-control' name='ano'> </div></div>"
+        container.innerHTML += html
+    }
+    
 }
 
 function exibir_form(tipo){
@@ -122,9 +141,12 @@ function update_cliente(){
             sobrenome = data['sobrenome'];
             email = data['email'];
             cpf = data['cpf'];
+            $('.alert').alert()
         }else{
-            $('.alert-primary').alert()
+            console.log('mensagem de erro')
+            
         }
     })
+
 
 }
